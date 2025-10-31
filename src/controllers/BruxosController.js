@@ -11,15 +11,19 @@ const getAllBruxos  = (req, res) => {
 };
 
 const getBruxoById = (req, res) => {
-    let id = req.params.id;
-    id = parseInt(id);
-    const bruxoid = bruxos.find(bruxo => bruxo.id === id);  
+    const id = parseInt(req.params.id, 10);
 
-    if(bruxoid){
-        res.status(200).json(bruxoid);  
-    } else {
-        res.status(404).json({erro: `O bruxo com o id ${id} não foi encontrado.`});
+    if (isNaN(id)) {
+        return res.status(400).json({ erro: 'ID inválido.' });
     }
-}
+
+    const bruxoid = bruxos.find(bruxo => bruxo.id === id);
+
+    if (bruxoid) {
+        return res.status(200).json(bruxoid);
+    }
+
+    return res.status(404).json({ erro: `O bruxo com o id ${id} não foi encontrado.` });
+};
 
 export { getAllBruxos, getBruxoById };
